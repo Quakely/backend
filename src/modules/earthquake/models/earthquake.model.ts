@@ -4,7 +4,7 @@ import {v4 as uuidv4} from "uuid";
 import {UserModel} from "../../models";
 import {GeoPointLocation} from "../../geology/geolocation.model";
 import * as fs from "fs";
-import {getNotificationService, getStorageService} from "../../../index";
+import {getConfigurationService, getNotificationService, getStorageService} from "../../../index";
 import {EarthquakeUtils} from "../utils/earthquake.utils";
 
 export enum EarthquakeSource {
@@ -22,7 +22,7 @@ export enum EarthquakeSource {
     },
 })
 @pre<Earthquake>('save', async function () {
-    const mapImageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${this.coordinates.coordinates[1]},${this.coordinates.coordinates[0]}&size=512x380&scale=2&zoom=1&path=color:red|weight:1|${this.coordinates.coordinates[1]},180|${this.coordinates.coordinates[1]},0|${this.coordinates.coordinates[1]},180&path=color:red|weight:1|geodesic:false|90,${this.coordinates.coordinates[0]}|-90,${this.coordinates.coordinates[0]}&key=AIzaSyC4Vy9RVcMDiIqmVIPNzOzd1KDK0poLhmc`;
+    const mapImageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${this.coordinates.coordinates[1]},${this.coordinates.coordinates[0]}&size=512x380&scale=2&zoom=1&path=color:red|weight:1|${this.coordinates.coordinates[1]},180|${this.coordinates.coordinates[1]},0|${this.coordinates.coordinates[1]},180&path=color:red|weight:1|geodesic:false|90,${this.coordinates.coordinates[0]}|-90,${this.coordinates.coordinates[0]}&key=${getConfigurationService().options.googleMapsAPIKey}`;
 
     try {
         const response = await fetch(mapImageUrl);

@@ -5,6 +5,7 @@ export interface ConfigurationOptions {
     loggerToken?: string;
     mongoURL?: string;
     databaseName?: string;
+    googleMapsAPIKey?: string;
 }
 
 

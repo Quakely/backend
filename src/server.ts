@@ -44,6 +44,7 @@ const registerServices = async () => {
                 loggerToken: process.env.LOGGER_TOKEN,
                 mongoURL: process.env.MONGO_URI,
                 databaseName: process.env.DATABASE_NAME,
+                googleMapsAPIKey: process.env.GOOGLE_MAPS_API_KEY
             })
     });
 
