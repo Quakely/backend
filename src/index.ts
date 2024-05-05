@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+
 import {container, InjectionToken} from "tsyringe";
 import {ConfigurationService} from "./lib/configuration/configuration.service";
 import {QuakelyLogger} from "./lib/logger/logger";

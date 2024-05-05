@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "start": "node build/server.js",
+    "start": "node build/index.js",
     "pm2": "tsc && pm2 start pm2.config.js && pm2 save"
   },
   "keywords": [],
