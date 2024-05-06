@@ -41,7 +41,12 @@ export class EarthquakeTrackingService {
                         const dbEarthquake = await getEarthquakeService().getEarthquakeById(earthquake.id);
 
                         if(dbEarthquake == null) {
-                            earthquake.isoCode = await EarthquakeUtils.getISOByCoordinates(earthquake.coordinates.coordinates);
+                            const {place, iso} = await EarthquakeUtils.getPlaceAndISOByCoordinates(earthquake.place,
+                                earthquake.coordinates.coordinates);
+
+                            earthquake.isoCode = iso;
+                            earthquake.place = place;
+
                             await getEarthquakeService().createEarthquake(earthquake);
                         }
                     } catch (error) {

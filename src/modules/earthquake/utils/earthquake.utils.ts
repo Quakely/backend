@@ -40,21 +40,34 @@ export class EarthquakeUtils {
             return await getStorageService().uploadFileToStorageBucket(tempFilePath, fileName, "badges");
         }
     }
-    static getISOByCoordinates = async (coordinates: number[]) => {
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates[1]},${coordinates[0]}&result_type=country&key=${getConfigurationService().options.googleMapsAPIKey!}`;
+    static getPlaceAndISOByCoordinates = async (initialPlace: string, coordinates: number[]): Promise<{place: string, iso: string}> => {
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates[1]},${coordinates[0]}&result_type=political&key=${getConfigurationService().options.googleMapsAPIKey!}`;
 
         try {
             const response = await fetch(url);
             const data = await response.json();
             if (data.status === 'OK') {
                 const components = data.results[0].address_components;
+                const place = components.find((c: any) => c.types.includes('political'));
                 const country = components.find((c: any) => c.types.includes('country'));
-                return country ? (country.short_name as string).toLowerCase() : "global";
+
+                if(place && country) {
+                    return {
+                        place: place.short_name,
+                        iso: (country.short_name as string).toLowerCase()
+                    };
+                } else if(place) {
+                    return {place: place.short_name, iso: "global"};
+                } else if(country) {
+                    return {place: initialPlace, iso: (country.short_name as string).toLowerCase()};
+                } else {
+                    return {place: initialPlace, iso: "global"};
+                }
             } else {
-                return "global";
+                return {place: initialPlace, iso: "global"};
             }
         } catch (error) {
-            return "global";
+            return {place: initialPlace, iso: "global"};
         }
     }
 }
