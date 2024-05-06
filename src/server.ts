@@ -30,10 +30,6 @@ const setupRoutes = (app: express.Application) => {
     app.use(express.urlencoded({ extended: true }));
 
     app.get('/', async (req: Request, res: Response) => {
-
-        await new INGVProvider().fetchEarthquakes();
-        await new ISCProvider().fetchEarthquakes();
-
         return res.status(StatusCodes.OK).json(Builder(QuakelyServerResponse)
             .code(StatusCodes.OK)
             .message("The quakely server is up and running. 🚀")
