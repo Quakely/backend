@@ -67,7 +67,7 @@ export class EarthquakeService {
         const earthquakeDTOs: EarthquakeDTO[] = await Promise.all(earthquakes.map(async earthquake => {
             return {
                 ...earthquake,
-                distance: earthquake.distance
+                distance: Number(earthquake.distance / 1000).toFixed(0)
             } as EarthquakeDTO
         }));
 

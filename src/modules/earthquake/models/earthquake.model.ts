@@ -14,6 +14,14 @@ export enum EarthquakeSource {
     ISC = "ISC"
 }
 
+function capitalizeFirstLetter(word: string): string {
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}
+
+function normalizePlace(place: string): string {
+    return place.split(' ').map(capitalizeFirstLetter).join(' ');
+}
+
 @index({ coordinates: '2dsphere' })
 @modelOptions({
     schemaOptions: {
@@ -22,6 +30,8 @@ export enum EarthquakeSource {
     },
 })
 @pre<Earthquake>('save', async function () {
+    this.place = normalizePlace(this.place);
+
     const mapImageUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${this.coordinates.coordinates[1]},${this.coordinates.coordinates[0]}&size=512x380&scale=2&zoom=1&path=color:red|weight:1|${this.coordinates.coordinates[1]},180|${this.coordinates.coordinates[1]},0|${this.coordinates.coordinates[1]},180&path=color:red|weight:1|geodesic:false|90,${this.coordinates.coordinates[0]}|-90,${this.coordinates.coordinates[0]}&key=${getConfigurationService().options.googleMapsAPIKey}`;
 
     try {
