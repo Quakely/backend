@@ -53,11 +53,11 @@ export class EarthquakeUtils {
 
                 if(place && country) {
                     return {
-                        place: place.short_name,
+                        place: place.long_name,
                         iso: (country.short_name as string).toLowerCase()
                     };
                 } else if(place) {
-                    return {place: place.short_name, iso: "global"};
+                    return {place: place.long_name, iso: "global"};
                 } else if(country) {
                     return {place: initialPlace, iso: (country.short_name as string).toLowerCase()};
                 } else {
