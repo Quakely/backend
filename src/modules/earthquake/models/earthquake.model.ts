@@ -122,4 +122,7 @@ export class Earthquake {
 
     @prop({required: false, default: ""})
     public earthquakeImage?: string;
+
+    @prop({required: false, default: ""})
+    public isoCode?: string;
 }

@@ -1,5 +1,5 @@
 import sharp from "sharp";
-import {getStorageService} from "../../../index";
+import {getConfigurationService, getStorageService} from "../../../index";
 import fs from "fs";
 
 export class EarthquakeUtils {
@@ -14,7 +14,6 @@ export class EarthquakeUtils {
             return 'red';
         }
     }
-
     static getBadge = async (magnitude: number) => {
         const fileName = `badge-magnitude-${magnitude.toFixed(1)}.png`;
 
@@ -39,6 +38,23 @@ export class EarthquakeUtils {
             fs.writeFileSync(tempFilePath, buffer);
 
             return await getStorageService().uploadFileToStorageBucket(tempFilePath, fileName, "badges");
+        }
+    }
+    static getISOByCoordinates = async (coordinates: number[]) => {
+        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${coordinates[1]},${coordinates[0]}&result_type=country&key=${getConfigurationService().options.googleMapsAPIKey!}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.status === 'OK') {
+                const components = data.results[0].address_components;
+                const country = components.find((c: any) => c.types.includes('country'));
+                return country ? (country.short_name as string).toLowerCase() : "global";
+            } else {
+                return "global";
+            }
+        } catch (error) {
+            return "global";
         }
     }
 }

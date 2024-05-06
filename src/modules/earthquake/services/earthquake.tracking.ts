@@ -5,8 +5,8 @@ import {INGVProvider} from "../providers/impl/ingv.provider";
 import {EMSCProvider} from "../providers/impl/emsc.provider";
 import {getLogger} from "../../../index";
 import {injectable, singleton} from "tsyringe";
-import { MongoError } from 'mongodb';
 import {getEarthquakeService} from "../index";
+import {EarthquakeUtils} from "../utils/earthquake.utils";
 
 @singleton()
 @injectable()
@@ -27,7 +27,7 @@ export class EarthquakeTrackingService {
 
         setInterval(async () => {
             await this.fetchAllEarthquakes();
-        }, 300000);
+        }, 100000);
     }
 
     private async fetchAllEarthquakes(): Promise<void> {
@@ -41,6 +41,7 @@ export class EarthquakeTrackingService {
                         const dbEarthquake = await getEarthquakeService().getEarthquakeById(earthquake.id);
 
                         if(dbEarthquake == null) {
+                            earthquake.isoCode = await EarthquakeUtils.getISOByCoordinates(earthquake.coordinates.coordinates);
                             await getEarthquakeService().createEarthquake(earthquake);
                         }
                     } catch (error) {

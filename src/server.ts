@@ -10,10 +10,13 @@ import mongoose from "mongoose";
 import http from "http";
 import {getConfigurationService, getLogger} from "./index";
 import userRoutes from "./modules/user/routes/user.routes";
+import earthquakeRoutes from "./modules/earthquake/routes/earthquake.routes";
 import {getEarthquakeTrackingService} from "./modules/earthquake";
 import 'dotenv/config'
 import {INGVProvider} from "./modules/earthquake/providers/impl/ingv.provider";
 import {ISCProvider} from "./modules/earthquake/providers/impl/isc.provider";
+import {EarthquakeModel} from "./modules/models";
+import {EarthquakeUtils} from "./modules/earthquake/utils/earthquake.utils";
 
 const app = express();
 
@@ -37,6 +40,7 @@ const setupRoutes = (app: express.Application) => {
     });
 
     app.use('/users', userRoutes);
+    app.use('/earthquakes', earthquakeRoutes);
 }
 
 const registerServices = async () => {
