@@ -47,19 +47,29 @@ export class EarthquakeUtils {
             const response = await fetch(url);
             const data = await response.json();
             if (data.status === 'OK') {
-                const components = data.results.filter((r: any) => r.address_components != undefined)
-                    .map((r: any) => r.address_components);
-                const place = components.find((c: any) => c.types.includes('political'));
-                const country = components.find((c: any) => c.types.includes('country'));
+                const results = data.results;
+                let place: any = null;
+                let country: any = null;
 
-                if(place && country) {
+                for (let result of results) {
+                    const addressComponents = result.address_components;
+                    if (addressComponents.length > 0) {
+                        const potentialPlace = addressComponents.find((c: any) => c.types.includes('political') && !c.types.includes('country'));
+                        const potentialCountry = addressComponents.find((c: any) => c.types.includes('country'));
+
+                        if (!place && potentialPlace) place = potentialPlace;
+                        if (!country && potentialCountry) country = potentialCountry;
+                    }
+                }
+
+                if (place && country) {
                     return {
                         place: place.long_name,
                         iso: (country.short_name as string).toLowerCase()
                     };
-                } else if(place) {
+                } else if (place) {
                     return {place: place.long_name, iso: "global"};
-                } else if(country) {
+                } else if (country) {
                     return {place: initialPlace, iso: (country.short_name as string).toLowerCase()};
                 } else {
                     return {place: initialPlace, iso: "global"};
