@@ -47,7 +47,8 @@ export class EarthquakeUtils {
             const response = await fetch(url);
             const data = await response.json();
             if (data.status === 'OK') {
-                const components = data.results[0].address_components;
+                const components = data.results.filter((r: any) => r.address_components != undefined)
+                    .map((r: any) => r.address_components);
                 const place = components.find((c: any) => c.types.includes('political'));
                 const country = components.find((c: any) => c.types.includes('country'));
 
