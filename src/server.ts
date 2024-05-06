@@ -64,7 +64,7 @@ export const startQuakelyServer = async (): Promise<void> => {
     try {
         registerServices().then(r => {
             http.createServer(app).listen(3000, () => {
-                getLogger().logger.info("Server started on port 3000");
+                getLogger().logger.info("Server started on port 4000");
                 setupRoutes(app);
 
                 getEarthquakeTrackingService().startEarthquakeTracking();
