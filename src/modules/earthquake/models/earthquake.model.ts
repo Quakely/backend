@@ -71,7 +71,7 @@ export enum EarthquakeSource {
         if (user.notification_options && user.notification_options.token) {
             const distanceKm = (user.distance / 1000).toFixed(2);
             const mapImageUrl = earthquake.earthquakeImage;
-            const message = `M${earthquake.magnitude}, ${earthquake.place}, @${distanceKm} from your position.`;
+            const message = `${earthquake.place}, @${distanceKm} from your position.`;
 
             const notificationPayload = {
                 app_id: "3fece6ef-a3f0-48f8-b2f9-e4fbb3a96d0e",

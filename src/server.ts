@@ -12,6 +12,8 @@ import {getConfigurationService, getLogger} from "./index";
 import userRoutes from "./modules/user/routes/user.routes";
 import {getEarthquakeTrackingService} from "./modules/earthquake";
 import 'dotenv/config'
+import {INGVProvider} from "./modules/earthquake/providers/impl/ingv.provider";
+import {ISCProvider} from "./modules/earthquake/providers/impl/isc.provider";
 
 const app = express();
 
@@ -28,6 +30,10 @@ const setupRoutes = (app: express.Application) => {
     app.use(express.urlencoded({ extended: true }));
 
     app.get('/', async (req: Request, res: Response) => {
+
+        await new INGVProvider().fetchEarthquakes();
+        await new ISCProvider().fetchEarthquakes();
+
         return res.status(StatusCodes.OK).json(Builder(QuakelyServerResponse)
             .code(StatusCodes.OK)
             .message("The quakely server is up and running. 🚀")

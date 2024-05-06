@@ -9,4 +9,7 @@ export class EarthquakeService {
     public createEarthquake = async(earthquake: Earthquake): Promise<HydratedDocument<Earthquake>> => {
         return EarthquakeModel.create(earthquake);
     }
+    public getEarthquakeById = async(earthquakeId: string): Promise<HydratedDocument<Earthquake> | null> => {
+        return EarthquakeModel.findOne({id: earthquakeId})
+    }
 }

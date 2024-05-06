@@ -16,6 +16,7 @@ export class ISCProvider extends EarthquakeProvider {
         const url = super.sourceURL.replace("%start%", startTime).replace("%end%", endTime);
 
         try {
+
             const response = await fetch(url, {
                 method: "GET",
                 headers: {
@@ -36,8 +37,8 @@ export class ISCProvider extends EarthquakeProvider {
 
 
     private processEarthquakeData(data: any): Earthquake[] {
-        const events = data['q:quakeml']['eventParameters']['event'];
-        return events.map((event: any) => Builder(Earthquake)
+        const events = data['q:quakeml']['eventParameters']['event'] as any[];
+        return events.filter(event => event.magnitude != undefined && event.magnitude.mag != undefined).map((event: any) => Builder(Earthquake)
             .id(event.preferredOriginID)
             .time(new Date(event.origin.time))
             .updatedAt(new Date())
@@ -54,9 +55,10 @@ export class ISCProvider extends EarthquakeProvider {
 
     private getFormattedDates(): { startTime: string, endTime: string } {
         const currentDate = new Date();
+        const previousDay = new Date(new Date().getTime() - 86400000);
         const nextDay = new Date(currentDate.getTime() + 86400000);
 
-        const startTime = currentDate.toISOString().split('T')[0] + "T00:00:00";
+        const startTime = previousDay.toISOString().split('T')[0] + "T00:00:00";
         const endTime = nextDay.toISOString().split('T')[0] + "T23:59:59";
 
         return { startTime, endTime };

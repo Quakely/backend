@@ -38,12 +38,14 @@ export class EarthquakeTrackingService {
 
                 earthquakes.map(async earthquake => {
                     try {
-                        await getEarthquakeService().createEarthquake(earthquake);
-                    } catch (error) {
-                        if ((error as MongoError).code !== 11000) {
-                            getLogger().logger.error(`An error occurred for earthquake with ID ${earthquake.id} whilst inserting in the database: `);
-                            getLogger().logger.error((error as MongoError).message);
+                        const dbEarthquake = await getEarthquakeService().getEarthquakeById(earthquake.id);
+
+                        if(dbEarthquake == null) {
+                            await getEarthquakeService().createEarthquake(earthquake);
                         }
+                    } catch (error) {
+                        getLogger().logger.error(`An error occurred for earthquake with ID ${earthquake.id} whilst inserting in the database: `);
+                        getLogger().logger.error((error as Error).message);
                     }
                 })
             } catch (error) {
