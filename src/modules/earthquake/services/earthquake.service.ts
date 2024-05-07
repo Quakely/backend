@@ -61,17 +61,17 @@ export class EarthquakeService {
 
         const countPipeline: any[] = [
             {
-                $match: {
-                    earthquakeType: EarthquakeType.VERIFIED
-                }
-            },
-            {
                 $geoNear: {
                     near: { type: "Point", coordinates: [userLocation.coordinates[0], userLocation.coordinates[1]] },
                     distanceField: "distance",
                     maxDistance: maxDistance,
                     minDistance: minDistance,
                     spherical: true
+                }
+            },
+            {
+                $match: {
+                    earthquakeType: EarthquakeType.VERIFIED
                 }
             },
             {
@@ -127,20 +127,20 @@ export class EarthquakeService {
 
         const countPipeline: any[] = [
             {
-                $match: {
-                    earthquakeType: EarthquakeType.PREDICTED,
-                    time: {
-                        $gte: today
-                    }
-                }
-            },
-            {
                 $geoNear: {
                     near: { type: "Point", coordinates: [userLocation.coordinates[0], userLocation.coordinates[1]] },
                     distanceField: "distance",
                     maxDistance: maxDistance,
                     minDistance: minDistance,
                     spherical: true
+                }
+            },
+            {
+                $match: {
+                    earthquakeType: EarthquakeType.PREDICTED,
+                    time: {
+                        $gte: today
+                    }
                 }
             },
             {
