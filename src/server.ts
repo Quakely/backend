@@ -39,6 +39,21 @@ const setupRoutes = (app: express.Application) => {
             .build())
     });
 
+    app.get('/proxy-earthquakes', async (req: Request, res: Response) => {
+        const response = await fetch("http://localhost:8000/earthquakes", {
+            method: "GET",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if(response.ok) {
+            const responseJson = await response.json();
+            return res.status(StatusCodes.OK).json(responseJson);
+        }
+    });
+
     app.use('/users', userRoutes);
     app.use('/earthquakes', earthquakeRoutes);
 }
