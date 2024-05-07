@@ -51,6 +51,8 @@ const setupRoutes = (app: express.Application) => {
         if(response.ok) {
             const responseJson = await response.json();
             return res.status(StatusCodes.OK).json(responseJson);
+        } else {
+            console.log(response.status);
         }
     });
 
