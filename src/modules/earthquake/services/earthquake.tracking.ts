@@ -31,16 +31,11 @@ export class EarthquakeTrackingService {
 
         setInterval(async () => {
             await this.fetchAllEarthquakes();
-
-            await EarthquakeModel.updateMany({}, {earthquakeType: EarthquakeType.VERIFIED})
         }, 100000);
 
-        /*
         setInterval(async () => {
             await this.fetchPredictedEarthquakes();
         }, 604800000)
-
-         */
     }
 
     private async fetchAllEarthquakes(): Promise<void> {

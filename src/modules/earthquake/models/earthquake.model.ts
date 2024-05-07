@@ -90,7 +90,7 @@ function normalizePlace(place: string): string {
             const notificationPayload = {
                 app_id: "3fece6ef-a3f0-48f8-b2f9-e4fbb3a96d0e",
                 include_player_ids: [user.notification_options.token],
-                headings: { en: "Earthquake detected by " + earthquake.source },
+                headings: { en: `Earthquake ${earthquake.earthquakeType == EarthquakeType.PREDICTED ? 'predicted' : 'detected'} by ` + earthquake.source },
                 contents: { en: message },
                 big_picture: mapImageUrl,
                 large_icon: large_icon_url
