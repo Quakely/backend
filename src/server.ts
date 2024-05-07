@@ -48,8 +48,12 @@ const setupRoutes = (app: express.Application) => {
             }
         });
 
+        console.log(response);
+
         if(response.ok) {
+            console.log("respones is ok");
             const responseJson = await response.json();
+            console.log(responseJson);
             return res.status(StatusCodes.OK).json(responseJson);
         } else {
             console.log(response.status);
