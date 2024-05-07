@@ -80,6 +80,8 @@ export class EarthquakeTrackingService {
             const responseJson = await response.json();
             const earthquakePredictions = responseJson.data as any[];
 
+            console.log("Earthquake predictions " + earthquakePredictions);
+
             await Promise.all(earthquakePredictions.map(async earthquakePrediction => {
                 try {
                     const earthquake = Builder(Earthquake)
@@ -97,10 +99,13 @@ export class EarthquakeTrackingService {
                         .source(EarthquakeSource.QUAKELY)
                         .build();
 
+                    console.log("At earthquake with id: " + earthquake.id);
+
                     const dbEarthquake = await getEarthquakeService()
                         .getPredictedEarthquakeByFeatures(earthquake.coordinates.coordinates[1], earthquake.coordinates.coordinates[0], earthquake.time);
 
                     if(dbEarthquake == null) {
+                        console.log("DB Earthquake does not exist")
                         const {place, iso} = await EarthquakeUtils.getPlaceAndISOByCoordinates(earthquake.place,
                             earthquake.coordinates.coordinates);
 
@@ -108,6 +113,9 @@ export class EarthquakeTrackingService {
                         earthquake.place = place;
 
                         await getEarthquakeService().createEarthquake(earthquake);
+                        console.log("Created earthquake.")
+                    } else {
+                        console.log("DB Earthquake exists.")
                     }
                 } catch (error) {
                     getLogger().logger.error(`An error occurred for earthquake with ID ${earthquakePrediction} whilst inserting in the database: `);
