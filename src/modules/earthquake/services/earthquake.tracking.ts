@@ -28,6 +28,7 @@ export class EarthquakeTrackingService {
 
     public startEarthquakeTracking = async (): Promise<void> => {
         await this.fetchAllEarthquakes();
+        await this.fetchPredictedEarthquakes();
 
         setInterval(async () => {
             await this.fetchAllEarthquakes();
