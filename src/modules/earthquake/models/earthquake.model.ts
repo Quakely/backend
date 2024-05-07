@@ -7,11 +7,16 @@ import * as fs from "fs";
 import {getConfigurationService, getNotificationService, getStorageService} from "../../../index";
 import {EarthquakeUtils} from "../utils/earthquake.utils";
 
+export enum EarthquakeType {
+    VERIFIED = "VERIFIED",
+    PREDICTED = "PREDICTED",
+}
 export enum EarthquakeSource {
     USGS = "USGS",
     EMSC = "EMSC",
     INGV = "INGV",
-    ISC = "ISC"
+    ISC = "ISC",
+    QUAKELY = "QUAKELY"
 }
 
 function capitalizeFirstLetter(word: string): string {
@@ -76,7 +81,6 @@ function normalizePlace(place: string): string {
 
     const large_icon_url = await EarthquakeUtils.getBadge(earthquake.magnitude);
 
-    console.log(large_icon_url)
     users.forEach((user) => {
         if (user.notification_options && user.notification_options.token) {
             const distanceKm = (user.distance / 1000).toFixed(2);
@@ -111,6 +115,9 @@ export class Earthquake {
 
     @prop({ required: true, default: () => new GeoPointLocation() })
     public coordinates!: GeoPointLocation;
+
+    @prop({ required: true, default: () => EarthquakeType.VERIFIED })
+    public earthquakeType!: EarthquakeType;
 
     @prop({required: true, default: 0})
     public depth!: number;

@@ -4,6 +4,7 @@ import {EarthquakeController} from "../controllers/earthquake.controller";
 
 const router = express.Router();
 
-router.get('/paginated', userAuthenticator(), EarthquakeController.getPaginatedEarthquakes);
+router.get('/verified/paginated', userAuthenticator(), EarthquakeController.getPaginatedEarthquakes);
+router.get('/predicted/paginated', userAuthenticator(), EarthquakeController.getPredictedEarthquakes);
 
 export default router;

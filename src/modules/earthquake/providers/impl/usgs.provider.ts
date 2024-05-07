@@ -1,7 +1,7 @@
 import {EarthquakeProvider} from "../earthquake.provider";
 import {Builder} from "builder-pattern";
 import {getLogger} from "../../../../index";
-import {Earthquake, EarthquakeSource} from "../../models/earthquake.model";
+import {Earthquake, EarthquakeSource, EarthquakeType} from "../../models/earthquake.model";
 
 export class USGSProvider extends EarthquakeProvider {
 
@@ -24,6 +24,7 @@ export class USGSProvider extends EarthquakeProvider {
             if(features) {
                 return features.map(feature => {
                     return Builder(Earthquake)
+                        .earthquakeType(EarthquakeType.VERIFIED)
                         .id(feature.id)
                         .time(new Date(feature.properties.time))
                         .updatedAt(new Date(feature.properties.updated))

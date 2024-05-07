@@ -2,7 +2,7 @@ import {EarthquakeProvider} from "../earthquake.provider";
 import {Builder} from "builder-pattern";
 import {getLogger} from "../../../../index";
 import { parseStringPromise } from 'xml2js';
-import {Earthquake, EarthquakeSource} from "../../models/earthquake.model";
+import {Earthquake, EarthquakeSource, EarthquakeType} from "../../models/earthquake.model";
 
 export class ISCProvider extends EarthquakeProvider {
 
@@ -40,6 +40,7 @@ export class ISCProvider extends EarthquakeProvider {
         const events = data['q:quakeml']['eventParameters']['event'] as any[];
         return events.filter(event => event.magnitude != undefined && event.magnitude.mag != undefined).map((event: any) => Builder(Earthquake)
             .id(event.preferredOriginID)
+            .earthquakeType(EarthquakeType.VERIFIED)
             .time(new Date(event.origin.time))
             .updatedAt(new Date())
             .coordinates({

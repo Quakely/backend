@@ -1,5 +1,5 @@
 import {EarthquakeProvider} from "../earthquake.provider";
-import {Earthquake, EarthquakeSource} from "../../models/earthquake.model";
+import {Earthquake, EarthquakeSource, EarthquakeType} from "../../models/earthquake.model";
 import {Builder} from "builder-pattern";
 import {getLogger} from "../../../../index";
 
@@ -25,6 +25,7 @@ export class INGVProvider extends EarthquakeProvider {
                 return features.map(feature => {
                     return Builder(Earthquake)
                         .id(feature.properties.eventId)
+                        .earthquakeType(EarthquakeType.VERIFIED)
                         .time(new Date(feature.properties.time))
                         .updatedAt(new Date(feature.properties.time))
                         .coordinates({
