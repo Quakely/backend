@@ -93,7 +93,8 @@ function normalizePlace(place: string): string {
                 headings: { en: `Earthquake ${earthquake.earthquakeType == EarthquakeType.PREDICTED ? 'predicted' : 'detected'} by ` + earthquake.source },
                 contents: { en: message },
                 big_picture: mapImageUrl,
-                large_icon: large_icon_url
+                large_icon: large_icon_url,
+                url: `quakely://map?latitude=${earthquake.coordinates.coordinates[0]}&longitude=${earthquake.coordinates.coordinates[1]}`
             };
 
             try {
