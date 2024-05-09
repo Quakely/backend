@@ -154,8 +154,7 @@ export class EarthquakeService {
 
         const queryPipeline: any[] = [
             ...countPipeline.slice(0, 2),
-            { $sort: { time: 1 } },
-            { $sort: { distance: 1 } },
+            { $sort: { time: 1, distance: 1 } },
             { $skip: (page - 1) * pageSize },
             { $limit: pageSize }
         ];
