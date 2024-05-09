@@ -5,6 +5,7 @@ import {EarthquakeModel} from "../../models";
 import {GeoPointLocation} from "../../geology/geolocation.model";
 import {EarthquakeDTO} from "../dtos/earthquake.dto";
 import {PaginationResponse} from "../../../utils/pagination";
+import {EarthquakeTransformer} from "../transformer/earthquake.transformer";
 
 @singleton()
 @injectable()
@@ -92,10 +93,7 @@ export class EarthquakeService {
 
         const earthquakes = await EarthquakeModel.aggregate(queryPipeline).exec();
         const earthquakeDTOs: EarthquakeDTO[] = await Promise.all(earthquakes.map(async earthquake => {
-            return {
-                ...earthquake,
-                distance: Number(earthquake.distance / 1000).toFixed(0)
-            } as EarthquakeDTO
+            return new EarthquakeTransformer(earthquake).toEarthquakeDTO(Number(earthquake.distance / 1000))
         }));
 
         return {
@@ -161,10 +159,7 @@ export class EarthquakeService {
 
         const earthquakes = await EarthquakeModel.aggregate(queryPipeline).exec();
         const earthquakeDTOs: EarthquakeDTO[] = await Promise.all(earthquakes.map(async earthquake => {
-            return {
-                ...earthquake,
-                distance: Number(earthquake.distance / 1000).toFixed(0)
-            } as EarthquakeDTO
+            return new EarthquakeTransformer(earthquake).toEarthquakeDTO(Number(earthquake.distance / 1000))
         }));
 
         return {
@@ -200,10 +195,7 @@ export class EarthquakeService {
         }).sort({ magnitude: -1, time: -1 }).limit(20).exec();
 
         return await Promise.all(earthquakes.map(async earthquake => {
-            return {
-                ...earthquake,
-                distance: undefined
-            } as EarthquakeDTO
+            return new EarthquakeTransformer(earthquake).toEarthquakeDTO()
         }));
     }
 }
