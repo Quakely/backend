@@ -173,4 +173,37 @@ export class EarthquakeService {
             contents: earthquakeDTOs
         };
     }
+
+    /**
+     * Fetches earthquakes within a specified bounding box, filters by type, and sorts by significance.
+     * @param lat_min Minimum latitude of the bounding box.
+     * @param lat_max Maximum latitude of the bounding box.
+     * @param lng_min Minimum longitude of the bounding box.
+     * @param lng_max Maximum longitude of the bounding box.
+     * @param types Array of EarthquakeType to filter by.
+     * @returns Array of sorted earthquake documents.
+     */
+    public async getEarthquakesByRegionAndType(lat_min: number, lat_max: number, lng_min: number, lng_max: number, types: EarthquakeType[]): Promise<EarthquakeDTO[]> {
+        const oneDayAgo = new Date(new Date().getTime() - (24 * 60 * 60 * 1000));
+
+        const earthquakes = await EarthquakeModel.find({
+            'coordinates.coordinates': {
+                $geoWithin: {
+                    $box: [
+                        [lng_min, lat_min],
+                        [lng_max, lat_max]
+                    ]
+                }
+            },
+            earthquakeType: { $in: types },
+            time: { $gte: oneDayAgo }
+        }).sort({ magnitude: -1, time: -1 }).limit(20).exec();
+
+        return await Promise.all(earthquakes.map(async earthquake => {
+            return {
+                ...earthquake,
+                distance: undefined
+            } as EarthquakeDTO
+        }));
+    }
 }

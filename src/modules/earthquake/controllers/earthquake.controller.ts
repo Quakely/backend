@@ -8,6 +8,7 @@ import {UserTransformer} from "../../user/transformers/user.transformer";
 import {HydratedDocument} from "mongoose";
 import {User} from "../../user/models/user.model";
 import {getEarthquakeService} from "../index";
+import {EarthquakeType} from "../models/earthquake.model";
 
 export class EarthquakeController {
     static getPaginatedEarthquakes = async (req: Request, res: Response) => {
@@ -35,6 +36,25 @@ export class EarthquakeController {
 
         const earthquakes = await getEarthquakeService()
             .getPredictedEarthquakes(user.location_options, regionType, page, size);
+
+        return res.status(StatusCodes.OK).json(
+            Builder(QuakelyServerResponse)
+                .code(StatusCodes.OK)
+                .message("Successfully fetched requested earthquakes")
+                .data(earthquakes)
+                .build()
+        )
+    }
+    static getEarthquakesOnMap = async (req: Request, res: Response) => {
+        const { lat_min, lat_max, lng_min, lng_max, types } = req.query;
+
+        const earthquakes = await getEarthquakeService().getEarthquakesByRegionAndType(
+            parseFloat(lat_min as string),
+            parseFloat(lat_max as string),
+            parseFloat(lng_min as string),
+            parseFloat(lng_max as string),
+            (types as string).split(',').map(r => r as EarthquakeType)
+        );
 
         return res.status(StatusCodes.OK).json(
             Builder(QuakelyServerResponse)
