@@ -18,7 +18,7 @@ export class DetectionService {
         getLogger().logger.info("Connecting to Kafka")
         this.producer = this.kafkaClient.producer()
         this.producer.connect().then(() => {
-            getLogger().logger.info("Connected producer to Kafka")
+            getLogger().logger.info("Connected to producer")
         })
     }
 

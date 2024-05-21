@@ -6,6 +6,8 @@ import {GeoPointLocation} from "../../geology/geolocation.model";
 import * as fs from "fs";
 import {getConfigurationService, getNotificationService, getStorageService} from "../../../index";
 import {EarthquakeUtils} from "../utils/earthquake.utils";
+import path from "node:path";
+import * as os from "node:os";
 
 export enum EarthquakeType {
     VERIFIED = "VERIFIED",
@@ -44,8 +46,11 @@ function normalizePlace(place: string): string {
 
         if (response.ok) {
             const imageBuffer = await response.arrayBuffer();
-            const tempFilePath = `tmp/earthquake-${this.id}-notification.png`;
-            fs.writeFileSync(tempFilePath, Buffer.from(imageBuffer));
+            const tempFilePath = path.join(os.tmpdir(), `earthquake-${this.id}-notification.png`);
+            fs.writeFileSync(
+                tempFilePath,
+                Buffer.from(imageBuffer)
+            );
 
             const earthquakeImageUrl = await getStorageService().uploadFileToStorageBucket(tempFilePath, `earthquake-${this.id}.png`, 'earthquakes/notifications');
             console.log(earthquakeImageUrl)
