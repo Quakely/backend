@@ -17,6 +17,7 @@ import {INGVProvider} from "./modules/earthquake/providers/impl/ingv.provider";
 import {ISCProvider} from "./modules/earthquake/providers/impl/isc.provider";
 import {EarthquakeModel} from "./modules/models";
 import {EarthquakeUtils} from "./modules/earthquake/utils/earthquake.utils";
+import {DetectionService} from "./lib/detection/detection.service";
 
 const app = express();
 
@@ -82,6 +83,9 @@ const registerServices = async () => {
                 getConfigurationService().options.loggerToken!
             )
     });
+    container.register<DetectionService>(DetectionService, {useValue:
+        new DetectionService()
+    })
 
     console.log(getConfigurationService().options)
 
