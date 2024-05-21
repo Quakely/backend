@@ -7,6 +7,7 @@ import {QuakelyRedisManager} from "./lib/redis/redis";
 import {startQuakelyServer} from "./server";
 import {StorageService} from "./lib/storage/storage.service";
 import {NotificationService} from "./lib/notification/notification.service";
+import {DetectionService} from "./lib/detection/detection.service";
 
 export function getService<T>(classType: InjectionToken<T>): T {
     return container.resolve(classType);
@@ -22,6 +23,9 @@ export function getRedisManager(): QuakelyRedisManager {
     return getService(QuakelyRedisManager);
 }
 
+export function getDetectionService(): DetectionService {
+    return getService(DetectionService);
+}
 export function getStorageService(): StorageService {
     return getService(StorageService);
 }

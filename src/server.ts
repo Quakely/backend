@@ -69,6 +69,8 @@ const registerServices = async () => {
             new ConfigurationService({
                 redisURL: process.env.REDIS_URI,
                 loggerToken: process.env.LOGGER_TOKEN,
+                kafkaBroker: process.env.KAFKA_BROKER,
+                kafkaClientId: process.env.KAFKA_CLIENT_ID,
                 mongoURL: process.env.MONGO_URI,
                 databaseName: process.env.DATABASE_NAME,
                 googleMapsAPIKey: process.env.GOOGLE_MAPS_API_KEY
