@@ -12,5 +12,6 @@ data class Detection(
     val longitude: Double,
     val deltaX: Double,
     val deltaY: Double,
-    val timestamp: Long
+    val timestamp: Long,
+    val deviceId: String
 )

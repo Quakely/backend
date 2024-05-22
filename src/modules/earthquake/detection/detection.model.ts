@@ -4,4 +4,5 @@ export interface Detection {
     deltaX: number;
     deltaY: number;
     timestamp: number;
+    deviceId: string;
 }
