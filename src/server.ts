@@ -18,6 +18,7 @@ import {ISCProvider} from "./modules/earthquake/providers/impl/isc.provider";
 import {EarthquakeModel} from "./modules/models";
 import {EarthquakeUtils} from "./modules/earthquake/utils/earthquake.utils";
 import {DetectionService} from "./lib/detection/detection.service";
+import detectionRoutes from "./modules/earthquake/detection/routes/detection.routes";
 
 const app = express();
 
@@ -63,6 +64,7 @@ const setupRoutes = (app: express.Application) => {
 
     app.use('/users', userRoutes);
     app.use('/earthquakes', earthquakeRoutes);
+    app.use('/detections', detectionRoutes);
 }
 
 const registerServices = async () => {
