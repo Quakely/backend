@@ -3,21 +3,21 @@ import {Detection} from "../detection.model";
 import {StatusCodes} from "http-status-codes";
 import QuakelyServerResponse from "../../../../utils/response";
 import {Builder} from "builder-pattern";
-import {DetectionService} from "../../../../lib/detection/detection.service";
-import {HydratedDocument} from "mongoose";
+import {getDetectionService} from "../../../../index";
 import {User} from "../../../user/models/user.model";
+import {HydratedDocument} from "mongoose";
 
 export class DetectionController {
     static publishDetection = async (req: Request, res: Response) => {
-        const service = new DetectionService();
         const user = res.locals.user as HydratedDocument<User>;
+        const service = getDetectionService();
         const detection: Detection = {
             latitude: req.body.latitude,
             longitude: req.body.longitude,
             deltaX: req.body.deltaX,
             deltaY: req.body.deltaY,
+            deviceId: user.anonymous_auth_identifier,
             timestamp: req.body.timestamp,
-            deviceId: user.anonymous_auth_identifier
         };
 
         try {
@@ -36,5 +36,25 @@ export class DetectionController {
                     .build()
             );
         }
+    }
+    static simulateEarthquake = async (req: Request, res: Response) => {
+        let epicenter: {latitude: number, longitude: number} | undefined = undefined;
+
+        if(req.query.epicenterLatitude && req.query.epicenterLongitude) {
+            epicenter = {
+                latitude: Number(req.query.epicenterLatitude),
+                longitude: Number(req.query.epicenterLongitude)
+            }
+        }
+
+        const simulationDetectionsData = await getDetectionService().simulateEarthquake(epicenter);
+
+        return res.status(StatusCodes.OK).json(
+            Builder(QuakelyServerResponse)
+                .code(StatusCodes.OK)
+                .message("Successfully simulated earthquake")
+                .data(simulationDetectionsData)
+                .build()
+        );
     }
 }

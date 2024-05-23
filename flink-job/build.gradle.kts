@@ -17,16 +17,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.apache.flink:flink-streaming-java:1.19.0")
+    compileOnly("org.apache.flink:flink-streaming-java:1.18.0")
 
-    implementation("org.apache.flink:flink-clients:1.19.0")
-    implementation("org.apache.flink:flink-connector-base:1.19.0")
+    implementation("org.apache.flink:flink-clients:1.18.0")
     implementation("org.apache.flink:flink-connector-kafka:3.1.0-1.18")
+    implementation("org.apache.flink:flink-connector-mongodb:1.1.0-1.18")
 
-    implementation("io.github.elki-project:elki:0.8.0")
     implementation("org.apache.kafka:kafka-clients:3.4.0")
-
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0-RC")
+
     testImplementation(kotlin("test"))
 }
 

@@ -27,7 +27,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
   flink-jobmanager:
-    image: flink:latest
+    image: flink:1.18.0
     command: jobmanager
     ports:
       - "8081:8081"
@@ -37,7 +37,7 @@ services:
       - quakely-network
 
   flink-taskmanager:
-    image: flink:latest
+    image: flink:1.18.0
     command: taskmanager
     environment:
       - "FLINK_PROPERTIES=jobmanager.rpc.address: flink-jobmanager"
