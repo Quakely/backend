@@ -8,17 +8,13 @@ import {ConfigurationService} from "./lib/configuration/configuration.service";
 import {QuakelyLogger} from "./lib/logger/logger";
 import mongoose from "mongoose";
 import http from "http";
-import {getConfigurationService, getLogger} from "./index";
+import {getConfigurationService, getDetectionService, getLogger} from "./index";
 import userRoutes from "./modules/user/routes/user.routes";
 import earthquakeRoutes from "./modules/earthquake/routes/earthquake.routes";
 import {getEarthquakeTrackingService} from "./modules/earthquake";
 import 'dotenv/config'
-import {INGVProvider} from "./modules/earthquake/providers/impl/ingv.provider";
-import {ISCProvider} from "./modules/earthquake/providers/impl/isc.provider";
-import {EarthquakeModel} from "./modules/models";
-import {EarthquakeUtils} from "./modules/earthquake/utils/earthquake.utils";
-import {DetectionService} from "./lib/detection/detection.service";
-import detectionRoutes from "./modules/earthquake/detection/routes/detection.routes";
+import detectionRoutes from "./modules/detection/routes/detection.routes";
+import {DetectionService} from "./modules/detection/services/detection.service";
 
 const app = express();
 
@@ -103,6 +99,7 @@ export const startQuakelyServer = async (): Promise<void> => {
                 setupRoutes(app);
 
                 getEarthquakeTrackingService().startEarthquakeTracking();
+                getDetectionService().registerListener();
             });
         })
     } catch (error) {
