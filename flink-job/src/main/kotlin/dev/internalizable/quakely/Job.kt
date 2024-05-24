@@ -24,10 +24,10 @@ import org.bson.BsonDocument
 
 const val KAFKA_BROKER_MAIN = "kafka:9092"
 const val KAFKA_GROUP_ID = "quakely"
-const val KAFKA_TOPIC_NAME = "quake-live-detections"
+const val KAFKA_TOPIC_NAME = "quake-live-detection"
 
 const val MONGO_DATABASE_NAME = "quakely"
-const val MONGO_COLLECTION_NAME = "live-earthquakes"
+const val MONGO_COLLECTION_NAME = "detections"
 
 /**
  * @author GrowlyX

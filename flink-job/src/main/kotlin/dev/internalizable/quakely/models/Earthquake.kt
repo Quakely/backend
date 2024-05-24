@@ -9,6 +9,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Earthquake(
-    val epicenter: Point,
+    val epicenter: GeospatialIndex,
     val magnitude: Double
 )

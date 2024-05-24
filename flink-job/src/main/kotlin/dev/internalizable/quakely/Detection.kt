@@ -2,6 +2,7 @@ package dev.internalizable.quakely
 
 import dev.internalizable.quakely.models.Detection
 import dev.internalizable.quakely.models.Earthquake
+import dev.internalizable.quakely.models.GeospatialIndex
 import org.apache.flink.util.Collector
 
 /**
@@ -43,7 +44,7 @@ fun detectEarthquake(detections: Iterable<Detection>, out: Collector<Earthquake>
             val magnitude = (30..70).random() / 10.0
 
             val earthquake = Earthquake(
-                epicenter = epicenter,
+                epicenter = GeospatialIndex("Point", doubleArrayOf(epicenter.y, epicenter.x)),
                 magnitude = magnitude
             )
 

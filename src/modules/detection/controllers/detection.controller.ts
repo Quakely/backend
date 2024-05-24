@@ -1,17 +1,17 @@
 import {Request, Response} from "express";
-import {Detection} from "../detection.model";
 import {StatusCodes} from "http-status-codes";
-import QuakelyServerResponse from "../../../../utils/response";
 import {Builder} from "builder-pattern";
-import {getDetectionService} from "../../../../index";
-import {User} from "../../../user/models/user.model";
 import {HydratedDocument} from "mongoose";
+import {User} from "../../user/models/user.model";
+import {getDetectionService} from "../../../index";
+import QuakelyServerResponse from "../../../utils/response";
+import {DetectionDTO} from "../dtos/detection.dto";
 
 export class DetectionController {
     static publishDetection = async (req: Request, res: Response) => {
         const user = res.locals.user as HydratedDocument<User>;
         const service = getDetectionService();
-        const detection: Detection = {
+        const detection: DetectionDTO = {
             latitude: req.body.latitude,
             longitude: req.body.longitude,
             deltaX: req.body.deltaX,

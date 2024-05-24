@@ -1,4 +1,4 @@
-export interface Detection {
+export interface DetectionDTO {
     latitude: number;
     longitude: number;
     deltaX: number;
