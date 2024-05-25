@@ -17,6 +17,8 @@ export class EarthquakeController {
         const size = req.query.size ? Number(req.query.size) : 10;
         const regionType = req.query.region ? req.query.region as "local" | "regional" | "global" : "local";
 
+        console.log(user.location_options);
+
         const earthquakes = await getEarthquakeService()
             .getVerifiedEarthquakes(user.location_options, regionType, page, size);
 

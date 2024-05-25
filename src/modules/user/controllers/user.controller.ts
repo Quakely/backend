@@ -10,7 +10,6 @@ import QuakelyServerResponse from "../../../utils/response";
 
 export class UserController {
     static registerUser = async (req: Request, res: Response) => {
-        console.log(req.body);
         const registerBody = req.body as RegisterUserDTO;
         const user = await getUserService().createUser(registerBody);
 
