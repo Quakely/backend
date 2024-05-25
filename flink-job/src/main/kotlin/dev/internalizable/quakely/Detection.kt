@@ -29,7 +29,6 @@ fun detectEarthquake(detections: Iterable<Detection>, out: Collector<Earthquake>
                     }
 
                     val (p1, p2) = chunk.map { vec ->
-                        // y = mx + b, b = -m * longitude + latitude
                         val m = vec.deltaY / vec.deltaX
                         val b = -m * vec.longitude + vec.latitude
 

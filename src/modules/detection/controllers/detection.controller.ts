@@ -6,17 +6,17 @@ import {User} from "../../user/models/user.model";
 import {getDetectionService} from "../../../index";
 import QuakelyServerResponse from "../../../utils/response";
 import {DetectionDTO} from "../dtos/detection.dto";
+import {v4 as uuidv4} from "uuid";
 
 export class DetectionController {
     static publishDetection = async (req: Request, res: Response) => {
-        const user = res.locals.user as HydratedDocument<User>;
         const service = getDetectionService();
         const detection: DetectionDTO = {
             latitude: req.body.latitude,
             longitude: req.body.longitude,
             deltaX: req.body.deltaX,
             deltaY: req.body.deltaY,
-            deviceId: user.anonymous_auth_identifier,
+            deviceId: uuidv4(),
             timestamp: req.body.timestamp,
         };
 

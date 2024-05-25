@@ -4,7 +4,7 @@ import {userAuthenticator} from "../../../middlewares/authenticator";
 
 const router = express.Router();
 
-router.get('/pipe', userAuthenticator(), DetectionController.publishDetection);
+router.get('/pipe', DetectionController.publishDetection);
 router.get('/simulate', DetectionController.simulateEarthquake);
 
 export default router;

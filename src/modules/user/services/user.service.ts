@@ -3,6 +3,7 @@ import {HydratedDocument} from "mongoose";
 import {EditUserDTO, RegisterUserDTO} from "../dtos/user.dto";
 import {UserModel} from "../../models";
 import {User} from "../models/user.model";
+import { v4 as uuidv4 } from 'uuid';
 
 @singleton()
 @injectable()
@@ -10,6 +11,7 @@ export class UserService {
     public createUser = async(userInformation: RegisterUserDTO): Promise<HydratedDocument<User>> => {
         return UserModel.create({
             ...userInformation,
+            anonymous_auth_identifier: uuidv4(),
             location_options: {
                 type: "Point",
                 coordinates: userInformation.coordinates

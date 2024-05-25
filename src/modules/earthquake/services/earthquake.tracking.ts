@@ -11,6 +11,7 @@ import {Earthquake, EarthquakeSource, EarthquakeType} from "../models/earthquake
 import {Builder} from "builder-pattern";
 import {v4 as uuidv4} from "uuid";
 import {EarthquakeModel} from "../../models";
+import fs from "fs";
 
 @singleton()
 @injectable()
@@ -64,21 +65,23 @@ export class EarthquakeTrackingService {
         }
     }
     private async fetchPredictedEarthquakes(): Promise<void> {
-        const response = await fetch("http://localhost:8000/earthquakes", {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
+        try {
+            const data = fs.readFileSync('earthquake_data.json', 'utf8');
+            const jsonResponse = JSON.parse(data);
 
-        if(response.ok) {
-            const responseJson = await response.json();
-            const earthquakePredictions = responseJson.data as any[];
+            const earthquakePredictions = jsonResponse.map((data: any) => {
+                return {
+                    timestamp: data[0],
+                    latitude: data[1],
+                    longitude: data[2],
+                    depth: data[3],
+                    magnitude: data[4]
+                };
+            });
 
             console.log("Earthquake predictions " + earthquakePredictions);
 
-            await Promise.all(earthquakePredictions.map(async earthquakePrediction => {
+            await Promise.all(earthquakePredictions.map(async (earthquakePrediction: any) => {
                 try {
                     const earthquake = Builder(Earthquake)
                         .earthquakeType(EarthquakeType.PREDICTED)
@@ -100,7 +103,7 @@ export class EarthquakeTrackingService {
                     const dbEarthquake = await getEarthquakeService()
                         .getPredictedEarthquakeByFeatures(earthquake.coordinates.coordinates[1], earthquake.coordinates.coordinates[0], earthquake.time);
 
-                    if(dbEarthquake == null) {
+                    if (dbEarthquake == null) {
                         console.log("DB Earthquake does not exist")
                         const {place, iso} = await EarthquakeUtils.getPlaceAndISOByCoordinates(earthquake.place,
                             earthquake.coordinates.coordinates);
@@ -118,8 +121,8 @@ export class EarthquakeTrackingService {
                     getLogger().logger.error((error as Error).message);
                 }
             }))
-        } else {
-            console.log(response.status);
+        } catch (e) {
+            console.log(e);
         }
     }
 }
